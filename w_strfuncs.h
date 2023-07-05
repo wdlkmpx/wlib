@@ -33,6 +33,7 @@ int w_strv_contains (const char * const *strv, const char *str);
 
 #define g_strchug    w_strchug
 #define g_strchomp   w_strchomp
+#define g_strstrip(str) w_strchomp(w_strchug(str))
 #define g_strreverse w_strreverse
 
 #define g_strv_length w_strv_length

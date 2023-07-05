@@ -35,42 +35,45 @@ int w_strcmp0 (const char *s1, const char *s2)
 
 char * w_strconcat (const char *string1, ...)
 {
-    size_t tlen, len;
+    size_t len_total;
+    size_t len_current;
     va_list args;
     const char * element;
     char * new_str, * pos;
     if (!string1) {
         return NULL;
     }
+
     // determine total string length
-    tlen = strlen (string1) + 1;
+    len_total = strlen (string1) + 1;
     va_start (args, string1);
     for (element = va_arg (args, char*);
-         element;
+         element != NULL;
          element = va_arg (args, char*))
     {
-        tlen += strlen (element) + 1;
+        len_total += strlen (element) + 1;
     }
     va_end (args);
+
     // concatenate strings
-    new_str = (char *) malloc (tlen+1);
-    len = strlen (string1);
+    new_str = (char *) malloc (len_total+1);
+    len_current = strlen (string1);
     pos = new_str;
-    if (len) {
-        memcpy (new_str, string1, len+1);
-        pos = new_str + len;
+    if (len_current) {
+        memcpy (new_str, string1, len_current+1);
+        pos = new_str + len_current;
     }
     va_start (args, string1);
     for (element = va_arg (args, char*);
-         element;
+         element != NULL;
          element = va_arg (args, char*))
     {
-        len = strlen (element);
-        if (!len) {
+        len_current = strlen (element);
+        if (!len_current) {
             continue;
         }
-        memcpy (pos, element, len+1);
-        pos = pos + len;
+        memcpy (pos, element, len_current+1);
+        pos = pos + len_current;
     }
     va_end (args);
     return new_str;
@@ -191,14 +194,14 @@ char * w_strchug (char *str) // remove leading spaces
 
 char * w_strchomp (char *str) // remove trailing spaces
 {
-    int i = 0;
+    int len, i;
     if (!str) {
         return NULL;
     }
     // find end of string
-    while (str[i]) i++;
-    i--;
+    len = strlen (str);
     // convert spaces to 0s until the first non-space char
+    i = len-1;
     while (i >= 0 && isspace(str[i])) {
         str[i] = '\0';
         i--;

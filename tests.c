@@ -226,6 +226,19 @@ static void w_utils_test (void)
 
 int main (int argc, char ** argv)
 {
+    char *a = w_build_path ("#", "a", "bb", "cc", "", NULL);
+    char *b = g_build_path ("#", "a", "bb", "cc", "", NULL);
+    puts (a);
+    puts (b);
+    w_free (a);
+    g_free (b);
+    a = w_build_filename ("a", "bb", "cc", "", NULL);
+    b = g_build_filename ("a", "bb", "cc", "", NULL);
+    puts (a);
+    puts (b);
+    w_free (a);
+    g_free (b);
+    return 0;
     w_fileutils_test ();
     w_inet_test ();
     w_strfuncs_test ();
